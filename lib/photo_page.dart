@@ -1,8 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-enum PhotoType { dog, landscape}
+enum PhotoType { dog, landscape }
 
 class PhotoPage extends StatefulWidget {
   const PhotoPage({super.key});
@@ -12,11 +13,16 @@ class PhotoPage extends StatefulWidget {
 }
 
 class _PhotoPageState extends State<PhotoPage> {
-  final List<String> _localPhotos = [
-    'assets/images/photo1.jpg'
-    'assets/images/photo2.jpg'
-    'assets/images/photo3.jpg'
-    'assets/images/photo4.jpg'
+  final List<String> _dogPhotos = [
+    'assets/images/photo1.jpg',
+    'assets/images/photo2.jpg',
+    'assets/images/photo3.jpg',
+  ];
+
+  final List<String> _landscapePhotos = [
+    'assets/images/photo4.jpg',
+    'assets/images/photo5.jpg',
+    'assets/images/photo6.jpg',
   ];
   String? _imageUrl;
   bool _isLoading = false;
@@ -30,23 +36,17 @@ class _PhotoPageState extends State<PhotoPage> {
     });
 
     try {
-      String url;
-      http.Response response;
+      await Future.delayed(const Duration(seconds: 2));
 
-      if (_animalType == PhotoType.dog) {
-        url = 'https://dog.ceo/api/breeds/image/random';
-        response = await http.get(Uri.parse(url));
-        Map<String, dynamic> data = jsonDecode(
-          response.body,
-        );
-        _imageUrl = data['message'];
-      } else {
-        final random =
-            DateTime.now().millisecondsSinceEpoch;
-        _imageUrl = 'https://picsum.photos/seed/$random/800/800';
-      }
+      final activeList = _animalType == PhotoType.dog
+          ? _dogPhotos
+          : _landscapePhotos;
+
+      final randomIndex =
+          DateTime.now().millisecondsSinceEpoch % activeList.length;
+      _imageUrl = activeList[randomIndex];
     } catch (e) {
-      _errorMessage = 'Не удалось загрузить фото. \nПроверьте подключение к интернету.';
+      _errorMessage = 'Ошибка загрузки фото';
     }
 
     setState(() {
@@ -125,10 +125,7 @@ class _PhotoPageState extends State<PhotoPage> {
             child: Text(
               _errorMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.red,
-              ),
+              style: const TextStyle(fontSize: 16, color: Colors.red),
             ),
           ),
         ),
@@ -138,15 +135,16 @@ class _PhotoPageState extends State<PhotoPage> {
     if (_imageUrl != null) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              _imageUrl!,
-              fit: BoxFit.cover,
-              width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                _imageUrl!,
+                fit: BoxFit.contain,
+                height: 250,
+                width: double.infinity,
+              ),
             ),
           ),
         ),
@@ -158,10 +156,7 @@ class _PhotoPageState extends State<PhotoPage> {
         child: Text(
           'Нажимте кнопку\nчтобы загрузить фото',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.grey,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       ),
     );
@@ -170,19 +165,16 @@ class _PhotoPageState extends State<PhotoPage> {
   Widget _buildButton() {
     String label = _animalType == PhotoType.dog
         ? '🐶 Новая собака'
-        : '🏕 Новый пейхаж';
+        : '🏕 Новый пейзаж';
 
     return ElevatedButton(
       onPressed: _isLoading ? null : _fetchPhoto,
-       child: Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 12,
         ),
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 16),
-        ),
+        child: Text(label, style: const TextStyle(fontSize: 16)),
       ),
     );
   }
