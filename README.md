@@ -1,17 +1,32 @@
-# photo_of_day_kuriev
+# Фото дня
 
-A new Flutter project.
+### В этом проекте создана страница с просмотров фото дня. Они делятся на 2 категории: собачки и пейзажи
 
-## Getting Started
+**Автор:**
+- Куриев Артур Майрбекович
+- ИСП-241
 
-This project is a starting point for a Flutter application.
+#### Стек и версии
+- Flutter 3.47.3
+- Dart SDK version: 3.13.3
+- платформа: Web (Chrome)
+- пакет: http
 
-A few resources to get you started if this is your first Flutter project:
+#### Запуск
+1. `git clone https://github.com/APTYPMORGAN/Flutter_photo_of_the_day`
+2. `cd photo_of_the_day`
+3. `flutter pub get`
+4. `flutter run -d chrome`
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+#### Что изучили:
+1. Узнал, что такое Future и async/await
+2. Научился показывать загрузку через крутилку
+3. Узнал, как работают Image.network и Image.asset
+4. Научился загружать фото из интернета
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Ответы на вопросы:
+1. Результат, который появится позже, а обычное значение возвращается сразу
+2. `Await` ждёт результат, но не блокирует всё приложение
+3. Первый раз включает загрузку, второй - выключает её и показывает фото
+4. Без скобок функция запускается при нажатии на кнопку, а со скобками - сразу
+5. `Image.network()` загружает фото из интернета, а `Image.asset()` берёт фото из папки проекта
